@@ -1,0 +1,50 @@
+@page "/users"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+
+@if (user == null)
+{
+    <p><em>Sedang Diproses...</em></p>
+}
+else
+{
+            @foreach (var u in user)
+            {
+                <div class="card mb-4" style="width: 18rem;">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">ID = @u.id</li>
+                        <li class="list-group-item">Name = @u.name</li>
+                        <li class="list-group-item">Username = @u.username</li>
+                        <li class="list-group-item">Email @u.email</li>
+                        <li class="list-group-item">Phone = @u.phone</li>
+                        <li class="list-group-item">Website = @u.website</li>
+                    </ul>
+                    </div>
+            }
+}
+
+@code {
+    private Users[]? user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await Http.GetFromJsonAsync<Users[]>("https://jsonplaceholder.typicode.com/users");
+    }
+
+    public class Users
+    {
+        public int id { get; set; }
+
+        public string name { get; set; }
+
+        public string username { get; set; }
+
+        public string email { get; set; }
+
+        public string phone { get; set; }
+
+        public string website { get; set; }
+    }
+}

@@ -1,0 +1,47 @@
+@page "/comments"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+
+@if (comen == null)
+{
+    <p><em>Sedang diproses...</em></p>
+}
+else
+{
+    @foreach (var c in comen)
+            {
+                <div class="card mb-4" style="width: 18rem;">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">User ID = @c.postId</li>
+                        <li class="list-group-item">ID = @c.id</li>
+                        <li class="list-group-item">Name = @c.name</li>
+                        <li class="list-group-item">Email = @c.email</li>
+                        <li class="list-group-item">Body = @c.body</li>
+                    </ul>
+                    </div>
+            }
+}
+
+@code {
+    private Comments[]? comen;
+
+    protected override async Task OnInitializedAsync()
+    {
+        comen = await Http.GetFromJsonAsync<Comments[]>("https://jsonplaceholder.typicode.com/comments");
+    }
+
+    public class Comments
+    {
+        public int postId { get; set; }
+
+        public int id { get; set; }
+
+        public string name { get; set; }
+
+        public string email { get; set; }
+
+        public string body { get; set; }
+    }
+}

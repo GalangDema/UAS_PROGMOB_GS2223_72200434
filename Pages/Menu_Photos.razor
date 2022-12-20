@@ -1,0 +1,47 @@
+@page "/photos"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+
+@if (photo == null)
+{
+    <p><em>Sedang Diproses...</em></p>
+}
+else
+{
+  @foreach (var p in photo)
+            {
+                <div class="card mb-4" style="width: 18rem;">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Album ID = @p.albumId</li>
+                        <li class="list-group-item">ID = @p.id</li>
+                        <li class="list-group-item">Title = @p.title</li>
+                        <li class="list-group-item">Url = @p.url</li>
+                        <li class="list-group-item">ThumnailURL = @p.thumbnailUrl</li>
+                    </ul>
+                    </div>
+            }
+}
+
+@code {
+    private Photos[]? photo;
+
+    protected override async Task OnInitializedAsync()
+    {
+        photo = await Http.GetFromJsonAsync<Photos[]>("https://jsonplaceholder.typicode.com/photos");
+    }
+
+    public class Photos
+    {
+        public int albumId { get; set; }
+
+        public int id { get; set; }
+
+        public string title { get; set; }
+
+        public string url { get; set; }
+
+        public string thumbnailUrl { get; set; }
+    }
+}

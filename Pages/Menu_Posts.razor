@@ -1,0 +1,44 @@
+@page "/posts"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+
+@if (ps == null)
+{
+    <p><em>Sedang Diproses...</em></p>
+}
+else
+{
+   @foreach (var p in ps)
+            {
+                <div class="card mb-4" style="width: 18rem;">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">User ID = @p.userId</li>
+                        <li class="list-group-item">ID = @p.id</li>
+                        <li class="list-group-item">Title = @p.title</li>
+                        <li class="list-group-item">Body = @p.body</li>
+                    </ul>
+                    </div>
+            }
+}
+
+@code {
+    private Posts[]? ps;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ps = await Http.GetFromJsonAsync<Posts[]>("https://jsonplaceholder.typicode.com/posts");
+    }
+
+    public class Posts
+    {
+        public int userId { get; set; }
+
+        public int id { get; set; }
+
+        public string title { get; set; }
+
+        public string body { get; set; }
+    }
+}
